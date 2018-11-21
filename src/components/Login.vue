@@ -76,6 +76,7 @@
                 })
                 document.dispatchEvent(event)
                 this.$router.push({ path: '/home'})
+                this.$router.go(0)
             }
           }
         })
