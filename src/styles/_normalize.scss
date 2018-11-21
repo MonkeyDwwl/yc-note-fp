@@ -1,0 +1,252 @@
+@charset "utf-8";
+// -- css reset begin --
+*,:after,:before {
+  box-sizing: border-box;
+  outline: none;
+}
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,
+legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,
+details,figcaption,figure,footer,header,hgroup,menu,nav,
+section {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+ // 标题自定义
+ h1,
+ h2,
+ h3,
+ h4,
+ h5,
+ h6 {
+  font-size: 100%;
+  font-weight: bold;
+}
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+i,
+th,
+var {
+  font-style: normal;
+  // font-weight: 500;
+}
+// 去掉li前符号，li 会继承
+ol,
+ul {
+  list-style: none;
+}
+// 默认不显示下划线
+ins,
+a,
+a:hover {
+  text-decoration: none;
+}
+// 去掉默认边框
+fieldset,
+img {
+  border: 0 none;
+  height: auto;
+  max-width: 100%;
+  vertical-align: top;
+}
+img {
+  // 禁止保存或拷贝图像,仅ios有效。
+  -webkit-touch-callout: none;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+}
+
+// -- css reset end --
+// 重设 HTML5 标签, IE 需要在 js 中 createElement(TAG)
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+  padding:0;
+  margin:0;
+}
+// HTML5 媒体文件与 img 保持一致
+audio,
+canvas,
+video,
+progress {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  vertical-align: baseline;
+}
+audio:not([controls]) {
+  // 防止现代浏览器将没有「controls」属性的 「audio」元素显示出来
+  display: none;
+  // 去掉 iOS 5 中多余的高度
+  height: 0;
+}
+//iso 隐藏 视频中间的play按钮
+video::-webkit-media-controls-start-playback-button {
+    display: none;
+}
+div {
+  // 移动端禁止选中内容  需要禁用，因ios微信输入框删除以后再输入无法以输入
+  // -webkit-user-select: none;
+}
+// 表单元素不继承父级 font
+body,
+button,
+input,
+select,
+textarea {
+  font-family: 'helvetica neue',Helvetica,'Droid Sans',Roboto,Segoe,'Heiti SC',stheiti,'Droid Sans Fallback','wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;
+  font-size: 14px;
+}
+button,
+input,
+select,
+textarea {
+  // 修正所有浏览器中字号不继承的问题
+  font-size: 100%;
+  color: inherit;
+  // 修正所有浏览器中字体不继承的问题
+  font-family: inherit;
+  // 改善在所有浏览器下的垂直对齐方式
+  vertical-align: baseline;
+  *vertical-align: middle;
+}
+textarea {
+  overflow: auto;
+  resize: none !important;
+}
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  cursor: pointer;
+  -webkit-appearance: button;
+  resize: none;
+  border: none;
+  background: none;
+}
+input[type="password"] {
+  display: inline-block;
+  letter-spacing: 4px;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+input,
+textarea {
+  // 在iOS上，输入框默认有内部阴影，但无法使用 box-shadow 来清除，如果不需要阴影，可以这样关闭
+    border: 0;
+    -webkit-appearance: none;
+}
+// input[type=input]{-webkit-appearance:none;} 移除ios的样式，但这个属性存在bug，会导致iso无法获取checkbox值，如下设置便不会报错了。
+input[type=checkbox]{
+  -webkit-appearance: checkbox;
+}
+a,
+button,
+input,
+optgroup,
+select,
+textarea {
+  // 去掉a、input和button点击时的蓝色外边框和灰色半透明背景
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+  color: black !important;
+  background-color: gray !important;
+}
+del {
+  text-decoration: line-through;
+}
+mark {
+  background: gold;
+}
+legend {
+  // 修正文字不换行的问题
+  white-space: normal;
+}
+button,
+select {
+  // 统一各浏览器「text-transform」不会继承的问题
+  text-transform: none;
+}
+// 统一上标和下标
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+// 去掉 Table cell 单元格间隙、单元格边距
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+// IE bug fixed: th 不继承 text-align
+th {
+  text-align: inherit;
+}
+// ie6 7 8(q) bug 为行内状态
+iframe {
+  display: block;
+}
+
+body {
+  color: gray !important;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-attachment: fixed;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+html{
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+        -webkit-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+        text-size-adjust: none;
+  // 在ios下滚动不流畅bug
+  -webkit-overflow-scrolling: touch;
+}
+html,
+body,
+#app {
+  height: 100%;
+}
+
+
