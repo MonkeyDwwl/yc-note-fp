@@ -21,14 +21,14 @@
       </el-row>
     </el-header>
     <el-container class="box">
-      <el-row >
+      <el-row style="width:100%">
         <el-col :span="4" style="margin-left: -20px" >
           <el-button type="primary" plain class="nav_btn" autofocus style="margin-left: 10px"><div @click="handleLabel(-1)">全部</div></el-button>
           <el-button type="primary" plain class="nav_btn" v-for="(item, index) in followTypes" :key="index">
             <div @click="handleLabel(item.value)" >{{item.label}}</div>
           </el-button>
         </el-col>
-        <el-col :span="18" style="margin-left: 10%">
+        <el-col :span="18" style="margin-left: 5%">
           <div v-for="item in articles" :key="item.id">
             <el-card shadow="hover" class="cardStyle clear-fix">
               <div @click="goToLink(item.link, item.id)" >
@@ -158,9 +158,8 @@
   }
   .cardStyle {
     float: left;
-    width: 288px;
-    margin: 10px;
-    margin-top: 0;
+    width: 32%;
+    margin: 0 1% 1% 0;
   }
   .cardTitle {
     width: 100%;
