@@ -3,7 +3,7 @@
     <el-header class="header" height=80px style="background: #fff">
       <el-row type="flex" justify="space-between">
         <el-col :span="6" style="text-align: left">
-          <img src="../assets/LOGO@2x.png" alt="" width="150px">
+          <img src="../assets/LOGO@2x.png" alt="" width="150px" @click="handleLogo">
         </el-col>
         <el-col :span="6">
           <el-dropdown @command="handleCommand" trigger="click">
@@ -24,13 +24,13 @@
       <el-row >
         <el-col :span="4" style="margin-left: -20px" >
           <el-button type="primary" plain class="nav_btn" autofocus style="margin-left: 10px"><div @click="handleLabel(-1)">全部</div></el-button>
-          <el-button type="primary" plain class="nav_btn" v-for="item in followTypes">
-            <div :key="item.value" @click="handleLabel(item.value)" >{{item.label}}</div>
+          <el-button type="primary" plain class="nav_btn" v-for="(item, index) in followTypes" :key="index">
+            <div @click="handleLabel(item.value)" >{{item.label}}</div>
           </el-button>
         </el-col>
         <el-col :span="18" style="margin-left: 10%">
-          <div v-for="item in articles">
-            <el-card shadow="hover" class="cardStyle clear-fix" :key="item.id">
+          <div v-for="item in articles" :key="item.id">
+            <el-card shadow="hover" class="cardStyle clear-fix">
               <div @click="goToLink(item.link, item.id)" >
                 <img :src="item.thumbPath" class="image">
                 <H4 class="cardTitle">{{item.title}}</H4>
@@ -41,7 +41,6 @@
               </div>
             </el-card>
           </div>
-
         </el-col>
       </el-row>
     </el-container>
@@ -65,9 +64,13 @@
       }
     },
     methods: {
+      handleLogo () {
+        this.$router.push({ path: '/home' })
+        this.$router.go(0)
+      },
       handleCommand(command) {
         if (_.isEqual(command, 'a')) {
-          this.$router.push({ path: '/home' })
+          this.handleLogo()
         }
         if (_.isEqual(command, 'b')) {
           const event = new CustomEvent('signout');
@@ -80,7 +83,6 @@
         const theUrl = `${API.GET_USER_ARTICLE}?type=-1&offset=0&limit=10`
         const res = await get(theUrl)
         const { data } = res.data
-        console.log(data)
         const articles = _.map(data, (item) => {
           const newThumbPath = `${BASE_HOST}/${item.thumbPath}`
           const time = moment(item.createdTime).format("MM-DD-YYYY")
@@ -88,7 +90,6 @@
           item.articlecreatedTime= time
           return item || []
         }) || []
-        console.log(articles)
         this.articles = articles
         if (typeId !== -1){
           this.articles = _.filter(articles, (article) => article.type.toString() === typeId.toString())
@@ -112,7 +113,6 @@
       this.followTypes = _.map(follows, (item) => {
         return ARTICLE_TYPES[item.type]
       })
-      console.log(this.followTypes)
       await this.handleLabel(-1)
     }
   }

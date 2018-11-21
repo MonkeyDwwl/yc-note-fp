@@ -2,7 +2,6 @@ import axios from 'axios'
 import {BASE_HOST} from './constant'
 
 let  AUTH_TOKEN = window.localStorage.getItem('token')
-console.log(AUTH_TOKEN)
 axios.defaults.baseURL = BASE_HOST
 
 export const post = async (url, body) => {
@@ -10,7 +9,6 @@ export const post = async (url, body) => {
   axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
   return await axios.post(url, body)
       .then(function (response) {
-        console.log(response)
         return response.data
       })
       .catch (function (error) {
@@ -25,7 +23,6 @@ export const get = async (url) => {
   axios.defaults.headers.common['Authorization'] = AUTH_TOKEN
   return await axios.get(url)
     .then(function (response) {
-      console.log(response)
       return response.data
     })
     .catch (function (error) {

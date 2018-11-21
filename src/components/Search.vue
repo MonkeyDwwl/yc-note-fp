@@ -4,7 +4,7 @@
       <el-row  type="flex" justify="space-between" style="height:80px">
         <el-col :span="8" style="margin-top: 10px">
           <el-row style="text-align: left">
-            <el-col :span="6"><img src="../assets/Mascot_Happy.png" alt="" width="40px" style="margin-right: 10px;"></el-col>
+            <el-col :span="6"><img src="../assets/Mascot_Happy.png" alt="" width="40px" style="margin-right: 10px;" @click="handleLogo"></el-col>
             <el-col :span="18" style="margin-left: -40px">
               <el-input placeholder="请输入内容" v-model="input" style="width:500px" clearable>
                 <el-button slot="append" icon="el-icon-search" @click="handleToSearch"></el-button>
@@ -27,12 +27,12 @@
       </el-row>
     </el-header>
     <el-main class="resultBox" v-if="data.length">
-      <el-card shadow="hover" v-for="item in data" class="cardStyle">
+      <el-card shadow="hover" v-for="(item, index) in data" :key="index" class="cardStyle">
         <div @click="goToLink(item._source.link, item._id)">
           <img :src="item._source.thumbPath" class="searchImage">
           <H4 class="cardTitle">{{item._source.title}}</H4>
           <div class="highlightBox">
-            <div v-for="highText in item.highlight.content" >
+            <div v-for="(highText, index) in item.highlight.content" :key="index" >
               <div v-html="highText" style="font-size:14px; color: lightslategrey; line-height: 1.5"></div>
             </div>
           </div>
@@ -64,6 +64,10 @@
       }
     },
     methods: {
+      handleLogo() {
+        this.$router.push({ path: '/home' })
+        this.$router.go(0)
+      },
       async handleToSearch () {
         const searchUrl = `${API.SEARCH}?keyword=${this.input}&offset=0&limit=10`
         await this.search(searchUrl)
@@ -72,7 +76,6 @@
         const res = await get(url)
         this.data = res.data.hits
         return _.map(this.data, (item) => {
-          console.log(item)
           const newThumbPath = `${BASE_HOST}/${item._source.thumbPath}`
           const time = moment(item._source.createdAt).format("MM-DD-YYYY")
           item._source.thumbPath = newThumbPath
@@ -92,7 +95,7 @@
           this.$router.push({ path: '/myfavorites' })
         }
         if (_.isEqual(command, 'b')) {
-          this.$router.push({ path: '/home' })
+          this.handleLogo()
         }
       },
     },

@@ -3,7 +3,7 @@
       <el-header class="header" height=80px style="background: #fff">
         <el-row type="flex" justify="space-between">
           <el-col :span="6" style="text-align: left">
-            <img src="../assets/LOGO@2x.png" alt="" width="150px">
+            <img src="../assets/LOGO@2x.png" alt="" width="150px" @click="handleLogo">
           </el-col>
           <el-col :span="6" v-if="isLogin">
               <el-dropdown @command="handleCommand" trigger="click" >
@@ -48,16 +48,16 @@
         <el-row :gutter="20">
           <el-col :span="6" style="margin-left: -20px">
             <el-button type="primary" plain class="nav_btn" autofocus style="margin-left: 10px"><div @click="handleLabel(-1)">全部</div></el-button>
-            <el-button type="primary" plain class="nav_btn" v-for="item in followTypes">
-              <div :key="item.value" @click="handleLabel(item.value)" >{{item.label}}</div>
+            <el-button type="primary" plain class="nav_btn" v-for="item in followTypes" :key="item.value">
+              <div  @click="handleLabel(item.value)" >{{item.label}}</div>
             </el-button>
           </el-col>
           <el-col :span="6">
             <el-card shadow="always" class="tab">
               最新分享
             </el-card>
-            <div v-for="item in latestArticles">
-              <el-card shadow="hover"  class="cardStyle" :key="item.id">
+            <div v-for="item in latestArticles" :key="item.id">
+              <el-card shadow="hover"  class="cardStyle" >
                 <div @click="goToLink(item.link, item.id)">
                   <img :src="item.thumbPath" class="image">
                   <H4 class="cardTitle">{{item.title}}</H4>
@@ -73,8 +73,8 @@
             <el-card shadow="always" class="tab">
               今日最热
             </el-card>
-            <div v-for="item in dayArticles">
-              <el-card shadow="hover"  class="cardStyle" :key="item.id">
+            <div v-for="item in dayArticles" :key="item.id">
+              <el-card shadow="hover"  class="cardStyle" >
                 <div @click="goToLink(item.link, item.id)">
                   <img :src="item.thumbPath" class="image">
                   <H4 class="cardTitle">{{item.title}}</H4>
@@ -90,8 +90,8 @@
             <el-card shadow="always" class="tab">
               本周最热
             </el-card>
-            <div v-for="item in weekArticles">
-              <el-card shadow="hover" class="cardStyle" :key="item.id">
+            <div v-for="item in weekArticles" :key="item.id">
+              <el-card shadow="hover" class="cardStyle" >
                 <div @click="goToLink(item.link, item.id)">
                   <img :src="item.thumbPath" class="image">
                   <H4 class="cardTitle">{{item.title}}</H4>
@@ -150,6 +150,9 @@
       }
     },
     methods: {
+      handleLogo() {
+        location.reload()
+      },
       async handleCommand(command) {
         if (_.isEqual(command, 'a')) {
           this.$router.push({ path: '/myfavorites' })
