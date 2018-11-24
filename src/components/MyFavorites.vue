@@ -13,7 +13,6 @@
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="a">前往首页</el-dropdown-item>
-              <el-dropdown-item command="b">钉钉推送</el-dropdown-item>
               <el-dropdown-item command="b">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -66,7 +65,6 @@
     methods: {
       handleLogo () {
         this.$router.push({ path: '/home' })
-        this.$router.go(0)
       },
       handleCommand(command) {
         if (_.isEqual(command, 'a')) {
@@ -118,12 +116,7 @@
   }
 </script>
 
-<style lang="scss">
-  @import '../styles/normalize';
-  body{
-    background: #fff;
-    padding: 0 20px;
-  }
+<style lang="scss" scoped>
   .homeBox {
     padding: 80px 100px 0 100px;
   }

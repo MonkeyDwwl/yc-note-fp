@@ -95,11 +95,7 @@
 
 </script>
 
-<style lang="scss">
-  @import '../styles/normalize';
-  body {
-    background: #fff;
-  }
+<style lang="scss" scoped>
   .login-container {
     -webkit-border-radius: 5px;
     border-radius: 5px;

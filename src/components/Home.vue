@@ -6,17 +6,17 @@
             <img src="../assets/LOGO@2x.png" alt="" width="150px" @click="handleLogo">
           </el-col>
           <el-col :span="6" v-if="isLogin">
-              <el-dropdown @command="handleCommand" trigger="click" >
-                <el-button type="primary">
-                  <img src="../assets/user.png" alt="" style="width:20px; height:20px; color:#fff; position:relative; top: -1px;">
-                  <span style="font-size:20px; color: #fff;">{{userName}}</span>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="a">前往收藏夹</el-dropdown-item>
-                  <el-dropdown-item command="b">钉钉推送</el-dropdown-item>
-                  <el-dropdown-item command="c">退出登录</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+            <el-dropdown @command="handleCommand" trigger="click">
+              <el-button type="primary">
+                <img src="../assets/user.png" alt="" style="width:20px; height:20px; color:#fff; position:relative; top: -1px;">
+                <span style="font-size:20px; color: #fff;">{{userName}}</span>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="a">前往收藏夹</el-dropdown-item>
+                <el-dropdown-item command="b">钉钉推送</el-dropdown-item>
+                <el-dropdown-item command="c">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </el-col>
           <el-col :span="6" v-else>
             <el-button type="primary" @click="handleLogin" >
@@ -259,12 +259,7 @@
   }
 </script>
 
-<style lang="scss">
-  @import '../styles/normalize';
-  body{
-    background: #fff;
-    padding: 0 20px;
-  }
+<style lang="scss" scoped>
   .homeBox {
     padding: 80px 100px 0 100px;
   }

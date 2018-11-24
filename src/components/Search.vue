@@ -66,7 +66,6 @@
     methods: {
       handleLogo() {
         this.$router.push({ path: '/home' })
-        this.$router.go(0)
       },
       async handleToSearch () {
         const searchUrl = `${API.SEARCH}?keyword=${this.input}&offset=0&limit=10`
@@ -108,11 +107,7 @@
     }
   }
 </script>
-<style lang="scss">
-  @import '../styles/normalize';
-  body{
-    background: #fff;
-  }
+<style lang="scss" scoped>
   .header {
     position:fixed;
     top:0;

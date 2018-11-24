@@ -52,7 +52,6 @@
             let loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass }
             const res = await post(API.LOGIN, loginParams)
             this.logining = false
-            console.log('>>>>', res)
             const { success, data, msg } = res
             if (!success) {
               this.$message({
@@ -76,7 +75,6 @@
                 })
                 document.dispatchEvent(event)
                 this.$router.push({ path: '/home'})
-                this.$router.go(0)
             }
           }
         })
@@ -98,11 +96,7 @@
   }
 </script>
 
-<style lang="scss">
-  @import '../styles/normalize';
-  body {
-    background: #fff;
-  }
+<style lang="scss" scoped>
   .login-container {
     -webkit-border-radius: 5px;
     border-radius: 5px;
