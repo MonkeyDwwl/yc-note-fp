@@ -15,4 +15,19 @@ export const ARTICLE_TYPES = [{
   label: '数据库'
 }]
 
+export const DIMENSION = [
+  {
+    key: 'latest',
+    name: '最新分享'
+  },
+  {
+    key: 'day',
+    name: '今日最热'
+  },
+  {
+    key: 'week',
+    name: '本周最热'
+  }
+]
+
 export const BASE_HOST = 'http://localhost:4000'

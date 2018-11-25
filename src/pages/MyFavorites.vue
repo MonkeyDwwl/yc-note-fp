@@ -22,9 +22,9 @@
     <el-container class="box">
       <el-row style="width:100%">
         <el-col :span="4" style="margin-left: -20px" >
-          <el-button type="primary" plain class="nav_btn" autofocus style="margin-left: 10px"><div @click="handleLabel(-1)">全部</div></el-button>
+          <el-button type="primary" plain class="nav_btn" autofocus style="margin-left: 10px"><div @click="handleLabel(-1, 0)">全部</div></el-button>
           <el-button type="primary" plain class="nav_btn" v-for="(item, index) in followTypes" :key="index">
-            <div @click="handleLabel(item.value)" >{{item.label}}</div>
+            <div @click="handleLabel(item.value, 0)" >{{item.label}}</div>
           </el-button>
         </el-col>
         <el-col :span="18" style="margin-left: 5%">
@@ -43,6 +43,16 @@
         </el-col>
       </el-row>
     </el-container>
+    <el-pagination
+      small
+      background
+      layout="prev, pager, next"
+      :total="50"
+      :page-size="pageSize"
+      @current-change="onChangePaging"
+      :current-page.sync="currentPage"
+    >
+    </el-pagination>
   </el-container>
 </template>
 
@@ -59,7 +69,10 @@
         input1: '',
         input2: '',
         followTypes: '',
-        articles: ''
+        articles: '',
+        pageSize: 12,
+        currentPage: 1,
+        currentType: -1
       }
     },
     methods: {
@@ -77,8 +90,8 @@
           this.$router.push({ path: '/login' })
         }
       },
-      async handleLabel(typeId) {
-        const theUrl = `${API.GET_USER_ARTICLE}?type=-1&offset=0&limit=10`
+      async handleLabel(typeId, offset) {
+        const theUrl = `${API.GET_USER_ARTICLE}?type=${typeId}&offset=${offset}&limit=12`
         const res = await get(theUrl)
         const { data } = res.data
         const articles = _.map(data, (item) => {
@@ -89,9 +102,6 @@
           return item || []
         }) || []
         this.articles = articles
-        if (typeId !== -1){
-          this.articles = _.filter(articles, (article) => article.type.toString() === typeId.toString())
-        }
       },
       async goToLink(url, id) {
         const visitUrl = _.replace(API.VISIT, ':id', id)
@@ -99,7 +109,13 @@
           await get(visitUrl)
         }
         window.open(url)
-      }
+      },
+      onChangePaging (val) {
+        this.currentPage = val
+        const offset = (this.currentPage - 1) * this.pageSize
+        const currentType = this.currentType || -1
+        this.handleLabel(currentType, offset)
+      },
     },
     async beforeMount () {
       this.userName = window.localStorage.getItem('userName')
@@ -111,7 +127,7 @@
       this.followTypes = _.map(follows, (item) => {
         return ARTICLE_TYPES[item.type]
       })
-      await this.handleLabel(-1)
+      await this.handleLabel(-1, 0)
     }
   }
 </script>

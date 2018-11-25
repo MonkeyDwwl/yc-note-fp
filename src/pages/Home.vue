@@ -47,63 +47,25 @@
       <div style="width: 100%;">
         <el-row :gutter="20">
           <el-col :span="6" style="margin-left: -20px">
-            <el-button type="primary" plain class="nav_btn" autofocus style="margin-left: 10px"><div @click="handleLabel(-1)">全部</div></el-button>
+            <el-button type="primary" plain class="nav_btn" autofocus style="margin-left: 10px"><div @click="handleLabel(-1, 0)">全部</div></el-button>
             <el-button type="primary" plain class="nav_btn" v-for="item in followTypes" :key="item.value">
-              <div  @click="handleLabel(item.value)" >{{item.label}}</div>
+              <div  @click="handleLabel(item.value, 0)" >{{item.label}}</div>
             </el-button>
           </el-col>
-          <el-col :span="6">
-            <el-card shadow="always" class="tab">
-              最新分享
-            </el-card>
-            <div v-for="item in latestArticles" :key="item.id">
-              <el-card shadow="hover"  class="cardStyle" >
-                <div @click="goToLink(item.link, item.id)">
-                  <img :src="item.thumbPath" class="image">
-                  <H4 class="cardTitle">{{item.title}}</H4>
-                  <el-row type="flex" justify="space-around" style="text-align: left; color: darkgrey">
-                    <p class="cardDescription">{{item.description}}</p>
-                    <p class="createdTime">{{item.articlecreatedTime}}</p>
-                  </el-row>
-                </div>
-              </el-card>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="always" class="tab">
-              今日最热
-            </el-card>
-            <div v-for="item in dayArticles" :key="item.id">
-              <el-card shadow="hover"  class="cardStyle" >
-                <div @click="goToLink(item.link, item.id)">
-                  <img :src="item.thumbPath" class="image">
-                  <H4 class="cardTitle">{{item.title}}</H4>
-                  <el-row type="flex" justify="space-around" style="text-align: left; color: darkgrey">
-                    <p class="cardDescription">{{item.description}}</p>
-                    <p class="createdTime">{{item.articlecreatedTime}}</p>
-                  </el-row>
-                </div>
-              </el-card>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="always" class="tab">
-              本周最热
-            </el-card>
-            <div v-for="item in weekArticles" :key="item.id">
-              <el-card shadow="hover" class="cardStyle" >
-                <div @click="goToLink(item.link, item.id)">
-                  <img :src="item.thumbPath" class="image">
-                  <H4 class="cardTitle">{{item.title}}</H4>
-                  <el-row type="flex" justify="space-around" style="text-align: left; color: darkgrey">
-                    <p class="cardDescription">{{item.description}}</p>
-                    <p class="createdTime">{{item.articlecreatedTime}}</p>
-                  </el-row>
-                </div>
-              </el-card>
-            </div>
+          <el-col :span="6" v-for="(item, index) in DIMENSION" :key="index">
+            <List :articles="articles[index]" :title="item.name" />
           </el-col>
         </el-row>
+        <el-pagination
+          small
+          background
+          layout="prev, pager, next"
+          :total="50"
+          :page-size="pageSize"
+          @current-change="onChangePaging"
+          :current-page.sync="currentPage"
+        >
+        </el-pagination>
       </div>
       <el-dialog title="添加钉钉机器人" :visible.sync="dialogFormVisible">
         <el-form :model="form">
@@ -125,11 +87,15 @@
 <script>
   import {get, post} from '../axios.util'
   import {API} from '../api'
-  import {ARTICLE_TYPES, BASE_HOST} from '../constant'
+  import {ARTICLE_TYPES, BASE_HOST, DIMENSION} from '../constant'
   import _ from 'lodash'
   import moment from 'moment'
+  import List from '../component/List.component'
 
   export default {
+    components: {
+      List
+    },
     data() {
       return {
         isLogin: false,
@@ -138,15 +104,17 @@
         activeName: 'first',
         userName: '',
         followTypes: [],
-        latestArticles: [],
-        dayArticles: [],
-        weekArticles: [],
+        articles: [],
+        pageSize: 5,
+        currentPage: 1,
+        currentType: -1,
         dialogFormVisible: false,
         form: {
           name: '',
           hookUrl: ''
         },
-        formLabelWidth: '120px'
+        formLabelWidth: '120px',
+        DIMENSION: []
       }
     },
     methods: {
@@ -207,11 +175,11 @@
         //   return ARTICLE_TYPES[item.type]
         // })
       },
-      async handleLabel(typeId) {
-        const dimension = ['latest', 'day', 'week']
+      async handleLabel(typeId, offset) {
+        this.currentType = typeId
         const getArticleApi = this.isLogin ? API.GET_ARTICLES : API.GET_ARTICLE_NO_TOKEN
-        const articles = await Promise.all(_.map(dimension, async (item) => {
-          const theUrl = `${getArticleApi}?dimension=${item}&type=${typeId}&offset=0&limit=10`
+        const articles = await Promise.all(_.map(DIMENSION, async (item) => {
+          const theUrl = `${getArticleApi}?dimension=${item.key}&type=${typeId}&offset=${offset}&limit=${this.pageSize}`
           const res = await get(theUrl)
           const { data } = res.data
           return _.map(data, (item) => {
@@ -225,7 +193,9 @@
         if (!articles) {
           return
         }
-        [this.latestArticles, this.dayArticles, this.weekArticles] = articles
+        console.log(articles)
+        this.articles = articles
+        // [this.latestArticles, this.dayArticles, this.weekArticles] = articles
       },
       async goToLink(url, id) {
         const visitUrl = _.replace(API.VISIT, ':id', id)
@@ -234,7 +204,7 @@
         }
         window.open(url)
       },
-      async handleToSearch () {
+      async handleToSearch() {
         if (this.isLogin) {
           const searchUrl = `${API.SEARCH}?keyword=${this.input2}&offset=0&limit=10`
           this.$router.push({ name: 'search', params: {url: searchUrl, keyword: this.input2}})
@@ -245,11 +215,18 @@
             type: 'warning'
           })
         }
-      }
+      },
+      onChangePaging (val) {
+        this.currentPage = val
+        const offset = (this.currentPage - 1) * this.pageSize
+        const currentType = this.currentType || -1
+        this.handleLabel(currentType, offset)
+      },
     },
     async beforeMount () {
       const token = window.localStorage.getItem('token')
-      await this.handleLabel(-1)
+      this.DIMENSION = DIMENSION
+      await this.handleLabel(-1, 0)
       this.isLogin = !token ? false : true
       if (this.isLogin) {
         await this.getMe()
@@ -279,44 +256,5 @@
     width:180px;
     height:40px;
     margin-bottom: 16px;
-  }
-  .tab {
-    background: #909399;
-    margin-bottom: 20px;
-    color: #fff;
-  }
-  .image {
-    width: 100%;
-    height: 180px;
-  }
-  .cardStyle {
-    margin: 4px 0;
-  }
-  .cardTitle {
-    width: 100%;
-    height: 20px;
-    text-align: left;
-    font-size: 15px;
-    line-height: 20px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow:ellipsis;
-    margin: 5px 0;
-  }
-  .cardDescription {
-    width: 100%;
-    height: 20px;
-    font-size: 14px;
-    line-height: 20px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow:ellipsis;
-  }
-  .createdTime {
-    width: 100%;
-    height: 20px;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: right;
   }
 </style>
