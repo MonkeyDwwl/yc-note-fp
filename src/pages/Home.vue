@@ -193,7 +193,6 @@
         if (!articles) {
           return
         }
-        console.log(articles)
         this.articles = articles
         // [this.latestArticles, this.dayArticles, this.weekArticles] = articles
       },

@@ -18,8 +18,21 @@
   </div>
 </template>
 <script>
+  import {API} from '../api'
+  import _ from 'lodash'
+  import {get} from '../axios.util'
+
   export default {
-    props: ['articles', 'title']
+    props: ['articles', 'title'],
+    methods: {
+      async goToLink(url, id) {
+        const visitUrl = _.replace(API.VISIT, ':id', id)
+        if (this.isLogin) {
+          await get(visitUrl)
+        }
+        window.open(url)
+      }
+    }
   }
 </script>
 <style>
